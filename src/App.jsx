@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 
-function App() {
+function Tictactoe() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(true);
   const [winner, setWinner] = useState(null);
@@ -120,4 +120,5 @@ function App() {
   );
 }
 
-export default App;
+export default Tictactoe;
+git com
