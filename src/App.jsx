@@ -1,178 +1,124 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
 
-// function App() {
-//   const [count, setCount] = useState(0)
 
-//   return (
-//     <> 
-      
-//       <div className="card">
-//         <button className="bg-green-200 font-800  " onClick={() => setCount((count) => count + 1)}>
-//           count is {count}
-//         </button>
-//      </div>
-//     </>
-//   )
-// }
+import { useState } from 'react';
 
-// export default App
-
-// import  { useState,useEffect } from "react";
-// import Button from "./Button";
-// // import showTodos from "./showTodos";
-// function App () {
-//   const[Todos ,setTodos]=useState("")
-//   const[arrayTodos ,setArrayTodos]=useState([{}])
-//   const[button,setButton]=useState("")
-
-//   const handlebtn=()=>{
-
-// setarrayTodos([...arrayTodos, { Todo: Todos }]);
-//   console.log(arrayTodos)
-
-//   }
-  
-// return(
-//   // <div className='flex justify-center mt-[100px]'>
-//     <div className='bg-blue-200 p-5 rounded-2xl border-4-blue-490 space-y-5'>
-//       <h3 className='text-lg text-center text-bold'>MY TODOS APP</h3>
-//      <input value={Todos} onChange={(e)=>setTodos(e.target.value)} placeholder="add your todos"/>
-//      <button handlebtn={handlebtn}>add question</button>
-//      <div>
-//       <showTodos arrayTodos={arrayTodos}/>
-//            </div>
-//     </div>
-//   // </div>
-// )
-// }
-// export default App;
-// App.jsx
-// import SignUp from './SignUp';
-
-// function App() {
-//   return (
-//     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-//       <SignUp />
-//     </div>
-//   );
-// }
-
-// export default App;
-
-// import React, { useState } from "react";
-// import  Button  from "./Button";
-
-// function QuestionForm({ onAddQuestion }) {
-//   const [question, setQuestion] = useState("");
-//   const [option1, setOption1] = useState("");
-//   const [option2, setOption2] = useState("");
-//   const [option3, setOption3] = useState("");
-//   const [correctOption, setCorrectOption] = useState("1");
-
-//   const handleAdd = () => {
-//     if (!question || !option1 || !option2 || !option3) return;
-//     onAddQuestion({
-//       question,
-//       options: [option1, option2, option3],
-//       correctOption: parseInt(correctOption),
-//     });
-//     setQuestion("");
-//     setOption1("");
-//     setOption2("");
-//     setOption3("");
-//     setCorrectOption("1");
-//   };
-
-//   return (
-//     <div className="p-4 space-y-4 max-w-xl mx-auto">
-//       <input
-//         className="w-full p-2 border rounded"
-//         placeholder="Enter your question"
-//         value={question}
-//         onChange={(e) => setQuestion(e.target.value)}
-//       />
-//       <input
-//         className="w-full p-2 border rounded"
-//         placeholder="Option 1"
-//         value={option1}
-//         onChange={(e) => setOption1(e.target.value)}
-//       />
-//       <input
-//         className="w-full p-2 border rounded"
-//         placeholder="Option 2"
-//         value={option2}
-//         onChange={(e) => setOption2(e.target.value)}
-//       />
-//       <input
-//         className="w-full p-2 border rounded"
-//         placeholder="Option 3"
-//         value={option3}
-//         onChange={(e) => setOption3(e.target.value)}
-//       />
-//       <select
-//         className="w-full p-2 border rounded"
-//         value={correctOption}
-//         onChange={(e) => setCorrectOption(e.target.value)}
-//       >
-//         <option value="1">Correct Option: 1</option>
-//         <option value="2">Correct Option: 2</option>
-//         <option value="3">Correct Option: 3</option>
-//       </select>
-//       <Button onClick={handleAdd}>Add Question</Button>
-//     </div>
-//   );
-// }
-
-// function QuestionList({ questions }) {
-//   return (
-//     <div className="p-4 space-y-4 max-w-xl mx-auto">
-//       {questions.map((q, index) => (
-//         <div key={index} className="p-4 border rounded shadow">
-//           <h3 className="font-semibold">{q.question}</h3>
-//           <ul className="list-disc pl-5">
-//             {q.options.map((opt, i) => (
-//               <li key={i} className={i + 1 === q.correctOption ? "font-bold text-green-600" : ""}>
-//                 {opt}
-//               </li>
-//             ))}
-//           </ul>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }
-
-// export default function App() {
-//   const [questions, setQuestions] = useState([]);
-
-//   const addQuestion = (question) => {
-//     setQuestions([...questions, question]);
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 py-10">
-//       <QuestionForm onAddQuestion={addQuestion} />
-//       <QuestionList questions={questions} />
-//     </div>
-//   );
-// }
-// export default App
-
-import React from 'react'
-import{Routes,Route} from 'react-router-dom'
 function App() {
-  return (
-    <div>
-      <Routes>
-     <Route index element={<Home/>} />
-     <Route/>
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [isXNext, setIsXNext] = useState(true);
+  const [winner, setWinner] = useState(null);
+  const [gameHistory, setGameHistory] = useState([]);
 
-      </Routes>
+  const calculateWinner = (squares) => {
+    const lines = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+      [0, 4, 8], [2, 4, 6] // diagonals
+    ];
+
+    for (let line of lines) {
+      const [a, b, c] = line;
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        return squares[a];
+      }
+    }
+    return null;
+  };
+
+  const handleClick = (index) => {
+    if (winner || board[index]) return;
+
+    const newBoard = board.slice();
+    newBoard[index] = isXNext ? 'X' : 'O';
+    
+    setBoard(newBoard);
+    setIsXNext(!isXNext);
+    
+    const gameWinner = calculateWinner(newBoard);
+    if (gameWinner) {
+      setWinner(gameWinner);
+    }
+    
+    // setGameHistory([...gameHistory, { board: [...newBoard], player: isXNext ? 'X' : 'O' }]);
+  };
+
+  const resetGame = () => {
+    setBoard(Array(9).fill(null));
+    setIsXNext(true);
+    setWinner(null);
+    // setGameHistory([]);
+  };
+
+  const renderSquare = (index) => {
+    return (
+      <button
+        className={`w-20 h-20 text-2xl font-bold m-1 border-2 border-gray-300 rounded-md bg-white hover:bg-gray-100 transition-colors
+          ${board[index] === 'X' ? 'text-blue-600' : 'text-red-600'}`}
+        onClick={() => handleClick(index)}
+      >
+        {board[index]}
+      </button>
+    );
+  };
+
+  const getStatus = () => {
+    if (winner) {
+      return `Winner: ${winner}`;
+    } else if (board.every(square => square !== null)) {
+      return 'Game ended in a draw!';
+    } else {
+      return `Next player: ${isXNext ? 'X' : 'O'}`;
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="text-center bg-white p-8 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold mb-6 text-gray-800">Tic Tac Toe</h1>
+        
+        <div className="text-xl font-semibold mb-4 text-gray-700">
+          {getStatus()}
+        </div>
+        
+        <div className="inline-block mb-6">
+          <div className="flex">
+            {renderSquare(0)}
+            {renderSquare(1)}
+            {renderSquare(2)}
+          </div>
+          <div className="flex">
+            {renderSquare(3)}
+            {renderSquare(4)}
+            {renderSquare(5)}
+          </div>
+          <div className="flex">
+            {renderSquare(6)}
+            {renderSquare(7)}
+            {renderSquare(8)}
+          </div>
+        </div>
+        
+        <button
+          className="px-6 py-2 bg-green-500 text-white font-medium rounded-md hover:bg-green-600 transition-colors mb-6"
+          onClick={resetGame}
+        >
+          Reset Game
+        </button>
+        
+        <div className="text-left max-h-40 overflow-y-auto p-4 border-t border-gray-200">
+          <h3 className="font-bold text-lg mb-2 text-gray-700">Game History</h3>
+          {gameHistory.length === 0 ? (
+            <p className="text-gray-500">No moves yet</p>
+          ) : (
+            gameHistory.map((move, index) => (
+              <div key={index} className="text-sm mb-1">
+                Move {index + 1}: Player {move.player} played
+              </div>
+            ))
+          )}
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
